@@ -13,7 +13,7 @@ class ApiController extends Controller
         $apiDir = trim($param['apiDir']);
         $apiName = trim($param['apiName']);
         $apiFunction = trim($param['apiFunction']);
-        $method = trim($param['method']);
+        $method = strtolower(trim($param['method']));
         $apiUrl = BLL_URL;
         if(!empty($apiDir)) $apiUrl .= $apiDir;
         if(!empty($apiName)) $apiUrl .= '/'.$apiName;

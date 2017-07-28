@@ -93,7 +93,7 @@ class PhpunitController extends Controller
         $dir = BLL_PATH.'/tests/controllers/'.$this->apiDir.'/'.$this->apiName;
         $this->testFile = BLL_PATH.'/tests/controllers/'.$this->apiDir.'/'.$this->apiName.'/'.$this->apiName.$this->method.'Test.php';
         $bool = mkDirs($dir);
-        if($bool != true) return '创建目录失败，请查看是否有权限';
+        if($bool != true) return '创建目录失败（'.$dir.'），请查看是否有权限';
         return array('state'=>1,'path'=>$filename);
     }
     /**
@@ -124,7 +124,7 @@ class PhpunitController extends Controller
         $text .= "    public function testGet(\$param,\$state)\n";
         $text .= "    {\n";
         $text .= "        //调用初始化接口\n";
-        $text .= "        \$res = \$this->CI->rest_interface->get('".$this->apiDir."/".$this->apiName."/".$this->apiFunction."',array('param'=>\$param));\n";
+        $text .= "        \$res = \$this->CI->rest_interface->".lcfirst($this->method)."('".$this->apiDir."/".$this->apiName."/".$this->apiFunction."',array('param'=>\$param));\n";
         $text .= "        //获取错误提示信息\n";
         $text .= "        \$error = isset(\$res->error) ? \$res->error : '';\n";
         $text .= "        //获取接口返回状态\n";
@@ -159,6 +159,7 @@ class PhpunitController extends Controller
         $myfile = fopen($this->testFile,"w") or die("Unable to open file!");
         fwrite($myfile,$text);
         fclose($myfile);
+        chmod($this->testFile,0666);
         return 1;
     }
 }
