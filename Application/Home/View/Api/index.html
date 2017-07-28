@@ -2,9 +2,13 @@
 <html>
 <head>
     <title>测试接口返回值</title>
+    <script type="text/javascript" src="__PUBLIC__/home/js/jquery-1.7.2.js"></script>
 </head>
 <style type="text/css">
-    input{width: 400px;}
+input{width: 400px;}
+.addArrParam,.addArrParams,.addParam{margin-left:20px;font-size: 14px;color:white;border:1px solid #333;padding:0px 10px;background:#ff6633;}
+a{text-decoration: none;cursor: pointer;}
+.hideArr{display: none;}
 </style>
 <body>
 <if condition="!empty($file)">
@@ -29,27 +33,26 @@
             <td>参数值</td>
         </tr>
         <tr>
-            <td><input type="text" name="key[]" style="width: 100px;" placeholder="请输入参数名称"></td>
-            <td><input type="text" name="value[]" placeholder="请输入参数值"></td>
+            <td><input type="text" name="key[]" style="width: 100px;" placeholder="参数名称"></td>
+            <td><input type="text" name="value[]" placeholder="参数值"><a href="javascript:;" class="addParam">新增参数</a></td>
         </tr>
-
-        <tr>
-            <td><input type="text" name="key[]" style="width: 100px;" placeholder="请输入参数名称"></td>
-            <td><input type="text" name="value[]" placeholder="请输入参数值"></td>
+        <tr class="addAllParam">
+            <td colspan="2"><a href="javascript:;" class="addArrParam" style="background:#ff0000;margin-left:0;">新增数组参数</a></td>
         </tr>
-        <tr>
-            <td><input type="text" name="key[]" style="width: 100px;" placeholder="请输入参数名称"></td>
-            <td><input type="text" name="value[]" placeholder="请输入参数值"></td>
+        <tr class="hideArr">
+            <td>数组下标：</td>
+            <td><input type="text" name="arrKey" placeholder="下标"></td>
         </tr>
-        <tr>
-            <td><input type="text" name="key[]" style="width: 100px;" placeholder="请输入参数名称"></td>
-            <td><input type="text" name="value[]" placeholder="请输入参数值"></td>
+        <tr class="hideArr">
+            <td>
+                <input type="text" name="arrParamKey[]" placeholder="参数名称" style="width: 100px;">
+            </td>
+            <td>
+                <input type="text" name="arrParamValue[]" placeholder="参数值">
+                <a href="javascript:;" class="addArrParams">+</a>
+            </td>
         </tr>
-        <tr>
-            <td><input type="text" name="key[]" style="width: 100px;" placeholder="请输入参数名称"></td>
-            <td><input type="text" name="value[]" placeholder="请输入参数值"></td>
-        </tr>
-        <tr>
+        <tr class="addArrParams_befor">
             <td colspan="2"> <input type="submit" value="提交"></td>
         </tr>
     </table>
@@ -58,3 +61,20 @@
 <iframe src="__CONTROLLER__/submit" frameborder="0" width="100%" height="500" name="apiIframe"></iframe>
 </body>
 </html>
+<script type="text/javascript">
+    //新增参数
+    $('.addParam').click(function(){
+            var html = '<tr> <td><input type="text" name="key[]" style="width: 100px;" placeholder="参数名称"></td> <td><input type="text" name="value[]" placeholder="参数值"></td> </tr>';
+            $('.addAllParam').before(html);
+    });
+    //新增数组参数
+    $('.addArrParam').click(function(){
+            $('.hideArr').show();
+    });
+    //新增数组参数的参数
+    $('.addArrParams').click(function(){
+        var html = '<tr> <td> <input type="text" name="arrParamKey[]" placeholder="参数名称" style="width: 100px;"></td> <td><input type="text" name="arrParamValue[]" placeholder="参数值"> </td> </tr>';
+        $('.addArrParams_befor').before(html);
+    });
+
+</script>

@@ -46,10 +46,20 @@ class ApiController extends Controller
                 if(!empty($val)) $data[$key] = trim($val);
             }
         }
+        //组装二维数组参数
+        $arrKey = trim($post['arrKey']);
+        if(!empty($arrKey))
+        {
+            foreach ($post['arrParamKey'] as $key=>$val)
+            {
+                $val = trim($val);
+                if(!empty($val)) $param[$arrKey][$val] = trim($post['arrParamValue'][$key]);
+            }
+        }
         //请求url
         $url = $data['bll_url'];
         if($url == '') exit('');
-        if($data['method'] == 'post')
+        if(strtolower($data['method']) == 'post')
         {
             //执行post请求
             $res = doPost($url,$param);

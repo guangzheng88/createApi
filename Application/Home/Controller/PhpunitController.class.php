@@ -117,7 +117,7 @@ class PhpunitController extends Controller
         $text .= "     * 被测方法描述:\n";
         $text .= "     * 被测方法成功返回返回:请参考成功返回值示例:\n";
         $text .= "     * 失败返回状态说明:\n";
-        $text .= "     * {\"status\":0,\"error\":\"Bad param\"}\n";
+        $text .= "     * {\"status\":0,\"error\":\"参数错误\",\"state\":0}\n";
         $text .= "     *\n";
         $text .= "     * @dataProvider giveGetData\n";
         $text .= "     */\n";
