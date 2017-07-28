@@ -1,0 +1,24 @@
+[ 2017-07-27T16:50:29+08:00 ] 192.168.9.141 /createPHPUnit/main.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000024s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000393s ]
+ERR: 无法加载模块:Main
+
+[ 2017-07-27T16:50:29+08:00 ] 192.168.9.141 /createPHPUnit/left.html
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000023s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000395s ]
+ERR: 无法加载模块:Left
+
+[ 2017-07-27T16:53:46+08:00 ] 192.168.9.141 /createPHPUnit/index.php/index.php/home/phpunit
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000020s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000385s ]
+ERR: 无法加载模块:Index.php
+
+[ 2017-07-27T16:54:36+08:00 ] 192.168.9.141 /createPHPUnit/index.php/index.php/home/phpunit
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000024s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000395s ]
+ERR: 无法加载模块:Index.php
+
