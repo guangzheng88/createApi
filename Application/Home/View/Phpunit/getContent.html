@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件已存在</title>
+</head>
+<body>
+    <script>
+        if(confirm("测试文件已存在，是否覆盖？"))
+        {
+            window.location.href="__SELF__/cover/1";
+        }else{
+            history.go(-1);
+        }
+    </script>
+</body>
+</html>

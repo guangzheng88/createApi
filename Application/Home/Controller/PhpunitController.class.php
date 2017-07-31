@@ -78,10 +78,10 @@ class PhpunitController extends Controller
             }
         }else
         {
-            $this->error = '文件不存在';
+            $this->error = '接口文件不存在';
         }
         $this->assign('error',$this->error);
-        dump($this->error);
+        echo '<h1> ╰_╯ '.$this->error.' ╰_╯</h1>';
     }
     /**
      * 递归创建单元测试目录
@@ -101,6 +101,13 @@ class PhpunitController extends Controller
      */
     public function getContent()
     {
+        if(file_exists($this->testFile))
+        {
+            if($_GET['cover'] != 1)
+            {
+                $this->display();exit;
+            }
+        }
         $text = "<?php\n";
         $text .= "/**\n";
         $text .= " * <类描述>\n";
@@ -156,7 +163,7 @@ class PhpunitController extends Controller
         $text .= "  ---------------------------------------------- 接口成功返回值示例 end  ----------------------------------------------\n";
         $text .= "*/\n";
         $text .= "}";
-        $myfile = fopen($this->testFile,"w") or die("Unable to open file!");
+        $myfile = fopen($this->testFile,"w") or die("Unable to open file! 写入文件失败！");
         fwrite($myfile,$text);
         fclose($myfile);
         chmod($this->testFile,0666);
