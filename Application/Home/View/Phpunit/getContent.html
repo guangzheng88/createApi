@@ -3,15 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>文件已存在</title>
+    <script type="text/javascript" src="__PUBLIC__/home/js/jquery-1.7.2.js"></script>
 </head>
 <body>
-    <script>
-        if(confirm("测试文件已存在，是否覆盖？"))
-        {
-            window.location.href="__SELF__/cover/1";
-        }else{
-            history.go(-1);
-        }
-    </script>
+    <form action="__CONTROLLER__/createUnit" style="display: none;">
+        接口地址:<input type="text" name="fileName" value="{$Think.get.fileName}"><br><br>
+        请求方法:<input type="text" name="function" value="{$Think.get.function}"><br><br>
+        请求方式:<input type="text" name="method" value="{$Think.get.method}"><br><br>
+        <input type="hidden" value="1" name="cover">
+        <input type="submit" value="提交">
+    </form>
 </body>
 </html>
+<script>
+    if(confirm("测试文件: \n{$testFile}  \n已存在, 确定覆盖？"))
+    {
+        $('form').submit();
+    }else{
+        history.go(-1);
+    }
+</script>

@@ -91,7 +91,7 @@ class PhpunitController extends Controller
         if(empty($method)) $method = 'get';
         //拼装文件名称
         $dir = BLL_PATH.'/tests/controllers/'.$this->apiDir.'/'.$this->apiName;
-        $this->testFile = BLL_PATH.'/tests/controllers/'.$this->apiDir.'/'.$this->apiName.'/'.$this->apiName.$this->method.'Test.php';
+        $this->testFile = BLL_PATH.'tests/controllers/'.$this->apiDir.'/'.$this->apiName.'/'.$this->apiName.$this->method.'Test.php';
         $bool = mkDirs($dir);
         if($bool != true) return '创建目录失败（'.$dir.'），请查看是否有权限';
         return array('state'=>1,'path'=>$filename);
@@ -105,7 +105,8 @@ class PhpunitController extends Controller
         {
             if($_GET['cover'] != 1)
             {
-                $this->display();exit;
+                $this->assign('testFile',$this->apiDir.'/'.$this->apiName.'/'.$this->apiName.$this->method.'Test.php');
+                $this->display("getContent");exit;
             }
         }
         $text = "<?php\n";
@@ -113,7 +114,7 @@ class PhpunitController extends Controller
         $text .= " * <类描述>\n";
         $text .= " * <详细描述>\n";
         $text .= " * <接口地址> ".BLL_URL.$this->apiDir."/".$this->apiName."/".$this->apiFunction."\n";
-        $text .= " * @param ".API_AUTHOR."\n";
+        $text .= " * @author ".API_AUTHOR."\n";
         $text .= " * @date ".date('Y-m-d H:i:s')."\n";
         $text .= " */\n";
         $text .= "class ".$this->apiName.$this->method."Test extends CI_TestCase\n";
