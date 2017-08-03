@@ -9,7 +9,6 @@ class ApiController extends Controller
     public function index()
     {
         $param = I('get.');
-        $file = urldecode($param['file']);
         $apiDir = trim($param['apiDir']);
         $apiName = trim($param['apiName']);
         $apiFunction = trim($param['apiFunction']);
@@ -19,8 +18,9 @@ class ApiController extends Controller
         if(!empty($apiName)) $apiUrl .= '/'.$apiName;
         if(!empty($apiFunction)) $apiUrl .= '/'.$apiFunction;
         if(empty($method)) $method = 'get';
+        $param = json_decode(urldecode(I('get.param')));
+        $this->assign('param',$param);
         $this->assign('apiUrl',$apiUrl);
-        $this->assign('file',$file);
         $this->assign('method',$method);
         $this->display();
     }

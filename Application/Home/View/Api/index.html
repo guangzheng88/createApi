@@ -6,15 +6,18 @@
 </head>
 <style type="text/css">
 input{width: 400px;}
-.addArrParam,.addArrParams,.addParam{margin-left:20px;font-size: 14px;color:white;border:1px solid #333;padding:0px 10px;background:#ff6633;}
+.remove,.addArrParam,.addArrParams,.addParam{margin-left:20px;font-size: 14px;color:white;border:1px solid #333;padding:0px 10px;background:#ff6633;}
 a{text-decoration: none;cursor: pointer;}
 .hideArr{display: none;}
+.remove{background: #999;}
 </style>
 <body>
-<if condition="!empty($file)">
+<if condition="!empty($_GET['apiDir'])">
     <p>
         单元测试文件生成成功，请将此内容粘贴至phpunit xml配置文件中<br>
-        <textarea style="width: 800px;background:yellow;">{$file}</textarea>
+        <textarea style="width: 800px;background:yellow;">
+<file>../../../tests/controllers/{$Think.get.apiDir}/{$Think.get.apiName}/{$Think.get.apiName}{$Think.get.method}Test.php</file>
+        </textarea>
     </p>
 </if>
 <h1 style="text-align: center;">测试接口返回值</h1>
@@ -36,6 +39,19 @@ a{text-decoration: none;cursor: pointer;}
             <td><input type="text" name="key[]" style="width: 100px;" placeholder="参数名称"></td>
             <td><input type="text" name="value[]" placeholder="参数值"><a href="javascript:;" class="addParam">新增参数</a></td>
         </tr>
+        <if condition="!empty($param)">
+            <foreach name="param" item="val">
+                <tr>
+                    <td>
+                        <input type="text" name="key[]" style="width: 100px;" value="{$val}">
+                    </td>
+                    <td>
+                        <input type="text" name="value[]" value="{$key}">
+                        <a href="javascript:;" class="remove">移除</a>
+                    </td>
+                </tr>
+            </foreach>
+        </if>
         <tr class="addAllParam">
             <td colspan="2"><a href="javascript:;" class="addArrParam" style="background:#ff0000;margin-left:0;">新增数组参数</a></td>
         </tr>
@@ -76,5 +92,7 @@ a{text-decoration: none;cursor: pointer;}
         var html = '<tr> <td> <input type="text" name="arrParamKey[]" placeholder="参数名称" style="width: 100px;"></td> <td><input type="text" name="arrParamValue[]" placeholder="参数值"> </td> </tr>';
         $('.addArrParams_befor').before(html);
     });
-
+    $('.remove').click(function(){
+        $(this).parent().parent().remove();
+    })
 </script>

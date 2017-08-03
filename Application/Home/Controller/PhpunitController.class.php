@@ -20,6 +20,10 @@ class PhpunitController extends Controller
     private $apiFunction = '';
     //test文件名称
     private $testFile = '';
+    //接口文件绝对路径
+    private $apiFilePath = '';
+    //可能有的参数
+    private $apiParameter = '';
     /**
      * 初始化页面
      */
@@ -53,6 +57,7 @@ class PhpunitController extends Controller
         //判断文件是否存在
         if(file_exists($fileName))
         {
+            $this->apiFilePath = $fileName;
             //创建文件夹并获取test文件名称
             $createFile = $this->createDirAndTestFile();
             if($createFile['state'] == 1)
@@ -64,11 +69,12 @@ class PhpunitController extends Controller
                     //文件写入成功，拼接xml配置内容
                     $xmlConfig = '<file>../../../tests/controllers/'.$this->apiDir.'/'.$this->apiName.'/'.$this->apiName.$this->method.'Test.php</file>';
                     $this->redirect('home/api/index',array(
-                            'file'=>urlencode($xmlConfig),
+                            //'file'=>urlencode($xmlConfig),
                             'apiDir' => $this->apiDir,
                             'apiName' => $this->apiName,
                             'apiFunction' => $this->apiFunction,
-                            'method' => $this->method
+                            'method' => $this->method,
+                            'param' => urlencode(json_encode($this->apiParameter))
                         )
                     );
                 }
@@ -88,7 +94,6 @@ class PhpunitController extends Controller
      */
     public function createDirAndTestFile()
     {
-        if(empty($method)) $method = 'get';
         //拼装文件名称
         $dir = BLL_PATH.'/tests/controllers/'.$this->apiDir.'/'.$this->apiName;
         $this->testFile = BLL_PATH.'tests/controllers/'.$this->apiDir.'/'.$this->apiName.'/'.$this->apiName.$this->method.'Test.php';
@@ -109,6 +114,8 @@ class PhpunitController extends Controller
                 $this->display("getContent");exit;
             }
         }
+        //获取可能的参数
+        $parameter = $this->getParameter();
         $text = "<?php\n";
         $text .= "/**\n";
         $text .= " * <类描述>\n";
@@ -132,7 +139,18 @@ class PhpunitController extends Controller
         $text .= "    public function testGet(\$param,\$state)\n";
         $text .= "    {\n";
         $text .= "        //调用初始化接口\n";
-        $text .= "        \$res = \$this->CI->rest_interface->".lcfirst($this->method)."('".$this->apiDir."/".$this->apiName."/".$this->apiFunction."',array('param'=>\$param));\n";
+        foreach ($parameter as $pk =>$pv)
+        {
+            $textParam .= "                    '".$pv."' => '".$pk."',\n";
+            if($pk != 0)
+            {
+                $paramText .= ',\''.$pv.'\'=>$param[\''.$pv.'\']';
+            }else
+            {
+                $paramText .= '\''.$pv.'\'=>$param[\''.$pv.'\']';
+            }
+        }
+        $text .= "        \$res = \$this->CI->rest_interface->".lcfirst($this->method)."('".$this->apiDir."/".$this->apiName."/".$this->apiFunction."',array(".$paramText."));\n";
         $text .= "        //获取错误提示信息\n";
         $text .= "        \$error = isset(\$res->error) ? \$res->error : '';\n";
         $text .= "        //获取接口返回状态\n";
@@ -148,12 +166,16 @@ class PhpunitController extends Controller
         $text .= "        return array(\n";
         $text .= "            //情景1\n";
         $text .= "            array(\n";
-        $text .= "                'merchant_id'=>'123456',\n";
+        $text .= "                'param' => array(\n";
+        $text .= $textParam;
+        $text .= "                ),\n";
         $text .= "                'state' => 1\n";
         $text .= "                ),\n";
         $text .= "            //情景2\n";
         $text .= "            array(\n";
-        $text .= "                'merchant_id'=>'0',\n";
+        $text .= "                'param' => array(\n";
+        $text .= $textParam;
+        $text .= "                ),\n";
         $text .= "                'state' => 0\n";
         $text .= "                ),\n";
         $text .= "            );\n";
@@ -169,5 +191,30 @@ class PhpunitController extends Controller
         fclose($myfile);
         chmod($this->testFile,0666);
         return 1;
+    }
+    /**
+     * 获取参数
+     */
+    public function getParameter()
+    {
+        //获取接口文件内容
+        $content = file_get_contents($this->apiFilePath);
+        //拼装接口方法名称
+        $method = strtolower($this->method);
+        $funName = $this->apiFunction.'_'.$method;
+        //获取方法出现的开始位置
+        $start = strpos($content, $funName);
+        //截取方法内容
+        $content =substr($content, $start);
+        //获取方法大概结束位置
+        $stop = strpos($content, ' function ');
+        if($stop != false) $content =substr($content,0,$stop);
+        //正则查找可能的参数
+        $m = $method.'(\'' ;
+        $pattern = '/(\$this->'.$method.'\(\')(.+?)(\'\))/';
+        preg_match_all($pattern, $content,$matche);
+        if(!$matche[2] && !is_array($matche[2]))  $matche[2] = array('key'=>'value');
+        $this->apiParameter = $matche[2];
+        return $matche[2];
     }
 }
