@@ -207,7 +207,7 @@ class PhpunitController extends Controller
         //截取方法内容
         $content =substr($content, $start);
         //获取方法大概结束位置
-        $stop = strpos($content, ' function ');
+        $stop = strpos($content, 'function ');
         if($stop != false) $content =substr($content,0,$stop);
         //正则查找可能的参数
         $m = $method.'(\'' ;
