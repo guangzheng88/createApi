@@ -210,7 +210,6 @@ class PhpunitController extends Controller
         $stop = strpos($content, 'function ');
         if($stop != false) $content =substr($content,0,$stop);
         //正则查找可能的参数
-        $m = $method.'(\'' ;
         $pattern = '/(\$this->'.$method.'\(\')(.+?)(\'\))/';
         preg_match_all($pattern, $content,$matche);
         if(!$matche[2] && !is_array($matche[2]))  $matche[2] = array('key'=>'value');

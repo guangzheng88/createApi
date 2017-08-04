@@ -6,10 +6,11 @@
 </head>
 <style type="text/css">
 input{width: 400px;}
-.remove,.addArrParam,.addArrParams,.addParam{margin-left:20px;font-size: 14px;color:white;border:1px solid #333;padding:0px 10px;background:#ff6633;}
+.createApi,.remove,.addArrParam,.addArrParams,.addParam{margin-left:20px;font-size: 14px;color:white;border:1px solid #333;padding:0px 10px;background:#ff6633;}
 a{text-decoration: none;cursor: pointer;}
 .hideArr{display: none;}
 .remove{background: #999;}
+.createApi{background: green;margin-right:20px;display:block;text-align: center;float: right;}
 </style>
 <body>
 <if condition="!empty($_GET['apiDir'])">
@@ -21,7 +22,7 @@ a{text-decoration: none;cursor: pointer;}
     </p>
 </if>
 <h1 style="text-align: center;">测试接口返回值</h1>
-<form action="__CONTROLLER__/submit" method="post" target="apiIframe" autocomplete="off">
+<form action="__CONTROLLER__/submit" method="post" target="apiIframe" autocomplete="off" id="requestForm">
     <table>
         <tr>
             <td>接口地址:</td>
@@ -36,17 +37,17 @@ a{text-decoration: none;cursor: pointer;}
             <td>参数值</td>
         </tr>
         <tr>
-            <td><input type="text" name="key[]" style="width: 100px;" placeholder="参数名称"></td>
-            <td><input type="text" name="value[]" placeholder="参数值"><a href="javascript:;" class="addParam">新增参数</a></td>
+            <td><input type="text" name="key[]" class="param_keys" style="width: 100px;" placeholder="参数名称"></td>
+            <td><input type="text" name="value[]" class="param_values" placeholder="参数值"><a href="javascript:;" class="addParam">新增参数</a></td>
         </tr>
         <if condition="!empty($param)">
             <foreach name="param" item="val">
                 <tr>
                     <td>
-                        <input type="text" name="key[]" style="width: 100px;" value="{$val}">
+                        <input type="text" name="key[]" class="param_keys" style="width: 100px;" value="{$val}">
                     </td>
                     <td>
-                        <input type="text" name="value[]" value="{$key}">
+                        <input type="text" name="value[]" class="param_values" value="{$key}">
                         <a href="javascript:;" class="remove">移除</a>
                     </td>
                 </tr>
@@ -61,10 +62,10 @@ a{text-decoration: none;cursor: pointer;}
         </tr>
         <tr class="hideArr">
             <td>
-                <input type="text" name="arrParamKey[]" placeholder="参数名称" style="width: 100px;">
+                <input type="text" name="arrParamKey[]" class="arr_key" placeholder="参数名称" style="width: 100px;">
             </td>
             <td>
-                <input type="text" name="arrParamValue[]" placeholder="参数值">
+                <input type="text" name="arrParamValue[]" class="arr_value" placeholder="参数值">
                 <a href="javascript:;" class="addArrParams">+</a>
             </td>
         </tr>
@@ -73,6 +74,17 @@ a{text-decoration: none;cursor: pointer;}
         </tr>
     </table>
 </form>
+<div>
+    <a href="javascript:;"  class="createApi">单元测试编写完成后【点我】可生成API注释</a>
+    <form action="__CONTROLLER__/apiAnnotation" method="post" target="apiAnnotation" id="apiForm"  style="display: none;">
+        <input type="hidden" name="method" value="{$method}">
+        <input type="hidden" name="apiDir" value="{$Think.get.apiDir}">
+        <input type="hidden" name="apiName" value="{$Think.get.apiName}">
+        <input type="hidden" name="apiFunction" value="{$Think.get.apiFunction}">
+    </form>
+</div>
+<hr>
+<iframe src="__CONTROLLER__/submit" frameborder="0" width="100%" height="500" name="apiAnnotation" style="display: none;" class="api_annotation_iframe"></iframe>
 <hr>
 <iframe src="__CONTROLLER__/submit" frameborder="0" width="100%" height="500" name="apiIframe"></iframe>
 </body>
@@ -80,7 +92,7 @@ a{text-decoration: none;cursor: pointer;}
 <script type="text/javascript">
     //新增参数
     $('.addParam').click(function(){
-            var html = '<tr> <td><input type="text" name="key[]" style="width: 100px;" placeholder="参数名称"></td> <td><input type="text" name="value[]" placeholder="参数值"></td> </tr>';
+            var html = '<tr> <td><input type="text" name="key[]" class="param_keys" style="width: 100px;" placeholder="参数名称"></td> <td><input type="text" name="value[]" class="param_values" placeholder="参数值"></td> </tr>';
             $('.addAllParam').before(html);
     });
     //新增数组参数
@@ -89,10 +101,53 @@ a{text-decoration: none;cursor: pointer;}
     });
     //新增数组参数的参数
     $('.addArrParams').click(function(){
-        var html = '<tr> <td> <input type="text" name="arrParamKey[]" placeholder="参数名称" style="width: 100px;"></td> <td><input type="text" name="arrParamValue[]" placeholder="参数值"> </td> </tr>';
+        var html = '<tr> <td> <input type="text" name="arrParamKey[]" class="arr_key" placeholder="参数名称" style="width: 100px;"></td> <td><input type="text" name="arrParamValue[]" class="arr_value" placeholder="参数值"> </td> </tr>';
         $('.addArrParams_befor').before(html);
     });
     $('.remove').click(function(){
         $(this).parent().parent().remove();
+    })
+    $('#requestForm').submit(function(){
+        $('.api_annotation_iframe').hide();
+    });
+    $('.createApi').click(function(){
+        //移除可能追加进去的key value
+        $('#apiForm .remove_key').remove();
+        $('#apiForm .remove_value').remove();
+        //遍历参数
+        var html = '';
+        $('.param_keys').each(function(){
+            var val = $(this).val();
+            if(val) html += '<input type="hidden" name="key[]" class="remove_key" value="'+val+'">';
+        });
+        //判断页面有没有填写参数,没有则从php遍历
+        if(html == '')
+        {
+            <if condition="!empty($param)">
+                <foreach name="param" item="val">
+                    html += '<input type="hidden" name="key[]" class="remove_key" value="{$val}">';
+                    html += '<input type="hidden" name="value[]" class="remove_value" value="{$val}">';
+                </foreach>
+            </if>
+        }else
+        {
+            //遍历值
+            $('.param_values').each(function(){
+                html += '<input type="hidden" name="value[]" class="remove_value" value="'+$(this).val()+'">';
+            });
+        }
+        var arrKey = $("[name='arrKey']").val();
+        html += '<input type="hidden" name="arrKey" value="'+arrKey+'">';
+        //遍历数组下标
+        $('.arr_key').each(function(){
+            html += '<input type="hidden" name="arrParamKey[]" value="'+$(this).val()+'"  class="remove_key" >';
+        });
+        $('.arr_value').each(function(){
+            html += '<input type="hidden" name="arrParamValue[]" value="'+$(this).val()+'"  class="remove_key" >';
+        });
+        $('#apiForm').append(html);
+        //生成文档注释
+        $('.api_annotation_iframe').show();
+        $('#apiForm').submit();
     })
 </script>
