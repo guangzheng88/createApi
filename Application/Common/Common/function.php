@@ -95,7 +95,7 @@ function doPut($url, $fields='', $extraheader = array()){
         $fields = http_build_query($fields);    //将数据进行URL-encode转换
     }
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_PUT, true);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $fields );
     curl_setopt($ch, CURLOPT_HTTPHEADER, $extraheader);
