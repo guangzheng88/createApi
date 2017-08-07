@@ -212,7 +212,17 @@ class PhpunitController extends Controller
         //正则查找可能的参数
         $pattern = '/(\$this->'.$method.'\(\')(.+?)(\'\))/';
         preg_match_all($pattern, $content,$matche);
-        if(!$matche[2] && !is_array($matche[2]))  $matche[2] = array('key'=>'value');
+        $pattern = '/(\$this->'.$method.'\(\")(.+?)(\"\))/';
+        preg_match_all($pattern, $content,$matche2);
+        if(!is_array($matche[2]) && !is_array($matche2[2])) {
+            $matche[2] = array('key'=>'value');
+        }else if(!is_array($matche[2]) && is_array($matche2[2])){
+            $matche[2] = $matche2[2];
+        }else
+        {
+            $matche[2] = array_merge($matche[2],$matche2[2]);
+        }
+        $matche[2] = array_unique($matche[2]);
         $this->apiParameter = $matche[2];
         return $matche[2];
     }

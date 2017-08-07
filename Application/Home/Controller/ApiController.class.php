@@ -198,12 +198,12 @@ class ApiController extends Controller
         foreach ($errorArr as $val)
         {
             $pattern = '/("error":")(.+?)(")/';
-             preg_match( $pattern, $val, $matches );
+             preg_match( $pattern, $val, $matches);
              $error = $matches[2];
              if($error)
              {
                 preg_match('/[\x7f-\xff]+/', $val, $matches );
-                $error .= $matches[0];
+                $error = $matches[0];
                 $data['error'][] = $error;
              }
              unset($error);

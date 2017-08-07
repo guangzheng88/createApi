@@ -9,7 +9,11 @@
 <form action="__CONTROLLER__/createUnit">
     接口地址:<input type="text" name="fileName" value="dining/"><br><br>
     请求方法:<input type="text" name="function" value="index"><br><br>
-    请求方式:<input type="text" name="method" value="get"><br><br>
+    请求方式:
+    <input type="radio" name="method" value="get" checked="checked">get &nbsp;&nbsp;
+    <input type="radio" name="method" value="post">post &nbsp;&nbsp;
+    <input type="radio" name="method" value="put">put &nbsp;&nbsp;
+    <input type="radio" name="method" value="delete">delete &nbsp;&nbsp;<br><br>
     <input type="submit" value="提交">
 </form>
 </body>

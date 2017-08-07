@@ -47,7 +47,7 @@ a{text-decoration: none;cursor: pointer;}
                         <input type="text" name="key[]" class="param_keys" style="width: 100px;" value="{$val}">
                     </td>
                     <td>
-                        <input type="text" name="value[]" class="param_values" value="{$key}">
+                        <input type="text" name="value[]" class="param_values" value="">
                         <a href="javascript:;" class="remove">移除</a>
                     </td>
                 </tr>
@@ -133,7 +133,7 @@ a{text-decoration: none;cursor: pointer;}
         {
             //遍历值
             $('.param_values').each(function(){
-                html += '<input type="hidden" name="value[]" class="remove_value" value="'+$(this).val()+'">';
+                if($(this).val()) html += '<input type="hidden" name="value[]" class="remove_value" value="'+$(this).val()+'">';
             });
         }
         var arrKey = $("[name='arrKey']").val();
