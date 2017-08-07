@@ -202,8 +202,8 @@ class ApiController extends Controller
              $error = $matches[2];
              if($error)
              {
-                preg_match('/[\x7f-\xff]+/', $val, $matches );
-                $error = $matches[0];
+                //preg_match('/[\x7f-\xff]+/', $val, $matches );
+                //$error = $matches[0];
                 $data['error'][] = $error;
              }
              unset($error);
