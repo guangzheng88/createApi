@@ -94,8 +94,8 @@ class ApiController extends Controller
     public function apiAnnotation()
     {
         $post = I('post.');
-        $$unitPath = $post['apiDir']."/".$post['apiName']."/".$post['apiName'].ucfirst($post['method']);
-        $parameter = $this->getUnitContent($$unitPath);
+        $unitPath = $post['apiDir']."/".$post['apiName']."/".$post['apiName'].ucfirst($post['method']);
+        $parameter = $this->getUnitContent($unitPath);
        // $text = "<?php\n";
         $text .= "/**\n";
         $text .= " * 以下为文档注释 用于生成apidoc ".API_AUTHOR.' '.date('Y-m-d H:i:s')."\n";

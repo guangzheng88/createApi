@@ -75,12 +75,27 @@ a{text-decoration: none;cursor: pointer;}
     </table>
 </form>
 <div>
-    <a href="javascript:;"  class="createApi">单元测试编写完成后【点我】可生成API注释</a>
-    <form action="__CONTROLLER__/apiAnnotation" method="post" target="apiAnnotation" id="apiForm"  style="display: none;">
-        <input type="hidden" name="method" value="{$method}">
-        <input type="hidden" name="apiDir" value="{$Think.get.apiDir}">
-        <input type="hidden" name="apiName" value="{$Think.get.apiName}">
-        <input type="hidden" name="apiFunction" value="{$Think.get.apiFunction}">
+    <a href="javascript:;" style="color: #999;" onclick="$('#apiForm').toggle();">点我</a>
+    <a href="javascript:;" class="createApi">单元测试编写完成后【点我】可生成API注释</a>
+    <form action="__CONTROLLER__/apiAnnotation" method="post" target="apiAnnotation" id="apiForm" style="display: none;">
+        <table>
+            <tr>
+                <td>请求方式:</td>
+                <td><input type="text" name="method" value="{$method}"></td>
+            </tr>
+            <tr>
+                <td>请求目录:</td>
+                <td><input type="text" name="apiDir" value="{$Think.get.apiDir}"></td>
+            </tr>
+            <tr>
+                <td>请求接口:</td>
+                <td><input type="text" name="apiName" value="{$Think.get.apiName}"></td>
+            </tr>
+            <tr>
+                <td>请求方法:</td>
+                <td><input type="text" name="apiFunction" value="{$Think.get.apiFunction}"></td>
+            </tr>
+        </table>
     </form>
 </div>
 <hr>

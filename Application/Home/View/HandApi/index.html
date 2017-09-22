@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>生成文档注释</title>
+    <script type="text/javascript" src="__PUBLIC__/home/js/jquery-1.7.2.js"></script>
+</head>
+<style type="text/css">
+input{width: 400px;}
+.r_input{width:auto;}
+.remove,.addArrParam,.addArrParams,.addParam,.addErrorParam,.addsuccesParam{margin-left:20px;font-size: 14px;color:white;border:1px solid #333;padding:0px 10px;background:#ff6633;}
+a{text-decoration: none;cursor: pointer;}
+.hideArr{display: none;}
+.remove{background: #999;}
+{background: green;margin-right:20px;display:block;text-align: center;float: right;}
+</style>
+<body>
+<h1 style="text-align: center;">生成文档注释</h1>
+<form action="__CONTROLLER__/submit" method="post" target="apiIframe" autocomplete="off" id="requestForm">
+    <table>
+        <tr>
+            <td>接口路径:</td>
+            <td>
+                <input type="text"  name="api_url" value="" placeholder="dining/merchantEdit/startInit">
+            </td>
+        </tr>
+        <tr>
+            <td>请求方式</td>
+            <td>
+                <input type="radio" name="api_method" class="r_input" value="get">get
+                <input type="radio" name="api_method" class="r_input" value="post" checked="checked">post
+                <input type="radio" name="api_method" class="r_input" value="put">put
+                <input type="radio" name="api_method" class="r_input" value="delete">delete
+            </td>
+        </tr>
+        <tr>
+            <td>接口描述</td>
+            <td><input type="text" name="api_title"></td>
+        </tr>
+        <tr>
+            <td>详细描述</td>
+            <td><textarea name="apiDescription" style="height: 80px;width: 400px;"></textarea></td>
+        </tr>
+        <tr>
+            <td>接口分组</td>
+            <td><input type="text" name="apiGroup"></td>
+        </tr>
+  <!--       <tr>
+            <td>接口名称</td>
+            <td><input type="text" name="apiName"></td>
+        </tr> -->
+        <tr>
+            <td>请求参数</td>
+            <td>参数描述</td>
+        </tr>
+        <tr>
+            <td><input type="text" name="key[]" class="param_keys" style="width: 100px;" placeholder="参数名称"></td>
+            <td><input type="text" name="value[]" class="param_values" placeholder="参数描述"><a href="javascript:;" class="addParam">新增参数</a></td>
+        </tr>
+        <tr class="addAllParam">
+            <td colspan="2"><a href="javascript:;" class="addArrParam" style="background:#ff0000;margin-left:0;">新增数组参数</a></td>
+        </tr>
+        <tr class="hideArr">
+            <td>数组下标：</td>
+            <td><input type="text" name="arrKey" placeholder="下标"></td>
+        </tr>
+        <tr class="hideArr">
+            <td>
+                <input type="text" name="arrParamKey[]" class="arr_key" placeholder="参数名称" style="width: 100px;">
+            </td>
+            <td>
+                <input type="text" name="arrParamValue[]" class="arr_value" placeholder="参数描述">
+                <a href="javascript:;" class="addArrParams">+</a>
+            </td>
+        </tr>
+        <tr class="addArrParams_befor">
+            <td>成功返回</td>
+            <td>参数描述</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" name="succeskey[]" class="param_keys" value="status" style="width: 100px;" placeholder="参数名称">
+            </td>
+            <td>
+                <input type="text" name="succesvalue[]" class="param_values" value="接口是否调用成功的标识,1为成功" placeholder="参数描述">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" name="succeskey[]" class="param_keys" value="state" style="width: 100px;" placeholder="参数名称">
+            </td>
+            <td>
+                <input type="text" name="succesvalue[]" class="param_values" value="业务处理结果,1为成功" placeholder="参数描述">
+            </td>
+        </tr>
+        <tr>
+            <td><input type="text" name="succeskey[]" class="param_keys" style="width: 100px;" placeholder="参数名称"></td>
+            <td><input type="text" name="succesvalue[]" class="param_values" placeholder="参数描述"><a href="javascript:;" class="addsuccesParam">新增参数</a></td>
+        </tr>
+        <tr class="addSuccesAllParam">
+            <td>成功返回值示例</td>
+            <td><textarea name="apiSuccessExample" style="height: 400px;width: 400px;"></textarea></td>
+        </tr>
+        <tr>
+            <td>失败返回</td>
+            <td>参数描述</td>
+        </tr>
+        <tr>
+            <td><input type="text" name="errorkey[]" class="param_keys" value="status" style="width: 100px;" placeholder="参数名称"></td>
+            <td><input type="text" name="errorvalue[]" class="param_values" value="不等于1,表示接口调用失败" placeholder="参数描述"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="errorkey[]" class="param_keys" value="state" style="width: 100px;" placeholder="参数名称"></td>
+            <td><input type="text" name="errorvalue[]" class="param_values" value="不等于1,表示业务结果处理失败" placeholder="参数描述"></td>
+        </tr>
+        <tr>
+            <td><input type="text" name="errorkey[]" class="param_keys" style="width: 100px;" placeholder="参数名称"></td>
+            <td><input type="text" name="errorvalue[]" class="param_values" placeholder="参数描述"><a href="javascript:;" class="addErrorParam">新增参数</a></td>
+        </tr>
+        <tr class="addErrorAllParam">
+            <td>失败返回值示例</td>
+            <td><textarea name="apiErrorExample" style="height: 120px;width: 400px;">object(stdClass)#1 (3) {
+    ["status"]=> int(0)
+    ["state"]=> int(0)
+    ["error"]=> "参数错误"
+}</textarea></td>
+        </tr>
+        <tr>
+            <td colspan="2"> <input type="submit" value="提交"></td>
+        </tr>
+    </table>
+</form>
+<hr>
+<hr>
+<iframe src="" frameborder="0" width="100%" height="500" class="api_annotation_iframe" name="apiIframe"></iframe>
+</body>
+</html>
+<script type="text/javascript">
+    //新增参数
+    $('.addParam').click(function(){
+            var html = '<tr> <td><input type="text" name="key[]" class="param_keys" style="width: 100px;" placeholder="参数名称"></td> <td><input type="text" name="value[]" class="param_values" placeholder="参数描述"></td> </tr>';
+            $('.addAllParam').before(html);
+    });
+    //新增成功参数
+    $('.addsuccesParam').click(function(){
+            var html = '<tr> <td><input type="text" name="succeserrorkey[]" class="param_keys" style="width: 100px;" placeholder="参数名称"></td> <td><input type="text" name="succeserrorvalue[]" class="param_values" placeholder="参数描述"></td> </tr>';
+            $('.addSuccesAllParam').before(html);
+    });
+
+   //新增失败参数
+    $('.addErrorParam').click(function(){
+            var html = '<tr> <td><input type="text" name="errorkey[]" class="param_keys" style="width: 100px;" placeholder="参数名称"></td> <td><input type="text" name="errorvalue[]" class="param_values" placeholder="参数描述"></td> </tr>';
+            $('.addErrorAllParam').before(html);
+    });
+    //新增数组参数
+    $('.addArrParam').click(function(){
+            $('.hideArr').show();
+    });
+    //新增数组参数的参数
+    $('.addArrParams').click(function(){
+        var html = '<tr> <td> <input type="text" name="arrParamKey[]" class="arr_key" placeholder="参数名称" style="width: 100px;"></td> <td><input type="text" name="arrParamValue[]" class="arr_value" placeholder="参数描述"> </td> </tr>';
+        $('.addArrParams_befor').before(html);
+    });
+    $('#requestForm').submit(function(){
+        $('.api_annotation_iframe').show();
+    });
+</script>
